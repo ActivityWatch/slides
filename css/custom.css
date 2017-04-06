@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css?family=Varela+Round');
+
+p {
+  font-family: 'Varela Round', sans-serif !important;
+}
+
+title, h1, h2 {
+  font-family: 'Varela Round', sans-serif !important;
+  text-transform: inherit !important;
+}
