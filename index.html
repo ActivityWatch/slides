@@ -21,6 +21,20 @@
             Log what you do on your computer.
             <br>Simple, extensible, no third parties.
           </p>
+
+          <small>
+            <p>
+            Get the source on <a href="https://github.com/ActivityWatch/activitywatch">GitHub</a>
+
+            <br>
+
+            <small>
+                Slides available at <a href="https://activitywatch.net/slides/">activitywatch.net/slides/</a>
+                (source on <a href="https://github.com/ActivityWatch/slides">GitHub</a>)
+            </small>
+            </p>
+          </small>
+
         </section>
 
         <section class="left-align">
@@ -38,6 +52,7 @@
             <ul>
               <li> A challenge to build something better than what exists
             </ul>
+            <li> Important problem in the long term
             <li> Great exercise in software engineering
             <li> Fun
           </ul>
@@ -99,7 +114,7 @@
             <ul>
               <li> Not any money in it
               <ul>
-                <li> ...with their businessplans
+                <li> ...with existing businessplans
               </ul>
               <li> Technical debt
                 <ul>
@@ -114,10 +129,46 @@
         </section>
 
         <section>
-          <section>
             <h3>
-              Architecture
+              About the project
             </h3>
+
+            <!-- Maybe I should have an introduction about why I cared about this for so long? -->
+
+            <small>
+              <ul>
+                <li><b>30th of December 2014:</b> First commit on a prototype I wrote
+                <li><b>April 2016:</b> Deprecated the prototype (now known as activitywatch-old) and made the initial commit to the new repo.
+                <li><b>Summer 2016:</b> Spent a few weeks working half-time on it with my brother and a couple of friends.
+                <li><b>May 2017:</b> Mature API, works well, almost ready with a public release.
+              </ul>
+
+              <p>
+              The vast majority of the work has been since last summer.
+              </p>
+            </small>
+        </section>
+
+        <section>
+          <h3>
+            About the code
+          </h3>
+
+          <ul>
+            <li> Written in Python 3.5+
+            <li> Focus on keeping things simple
+            <li> Vast majority of the code is easy to read
+            <li> Split up into several repositories
+              <br><minor>served us good but has some downsides</minor>
+            <li> Core library has good test coverage (&gt;80%)
+              <br><minor>and is typechecked using mypy</minor>
+          </ul>
+        </section>
+
+        <section>
+
+          <section>
+            <h3>Architecture</h3>
 
             <ul>
               <li>Server
@@ -128,14 +179,18 @@
                 <ul>
                   <li>Watchers
                   <ul>
-                    <li>Gather data and sends it to the server.
-                    <li>A type of client.
+                    <li>A type of client that gathers data and sends it to the server.
                     <li>Examples: Active window, AFK, Web browser
                   </ul>
-                  <li>Interfaces/visualization
-                  <li>Custom analysis
-                </ul>
-              <li>More?
+                <li>Web UI
+                  <ul>
+                    <li>Built versions are hosted by the server
+                    <li>Written in Vue.js, uses server API for everything
+                  </ul>
+                <li>Custom interfaces/visualization/analysis tools
+              </ul>
+              <li>Core library
+              <li>Client library <minor>Makes it easy to write clients</minor>
             </ul>
           </section>
 
@@ -162,7 +217,7 @@
           </section>
 
           <section>
-            <h5>Writing a watcher</h5>
+            <h5>Making watcher-writing easy</h5>
 
             <small>
               <p>
@@ -186,16 +241,15 @@
           <section>
             <h4>Merging events with the heartbeat method</h4>
 
-            <small>
-            If new event has identical data as previous event then:
-            </small>
-
             <pre><code class="lang-python" data-trim>e1 = Event(timestamp="...10:26:52", duration=10, ...)
 e2 = Event(timestamp="...10:27:12", duration=0, ...)
 
 def merge(e1, e2, pulsetime=10):
-  if(e1.timestamp + e1.duration &gt;= e2.timestamp + pulsetime \
+  # e1 is the last recorded event
+  # e2 is a heartbeat
+  if(e1.timestamp + e1.duration + pulsetime &lt;= e2.timestamp \
      and e1.data == e2.data):
+    # e2 had identical data and was within pulsetime window
     return [Event(timestamp=e1.timestamp,
                   duration=e2.timestamp - e1.timestamp,
                   data=e1.data)]
@@ -228,17 +282,56 @@ def merge(e1, e2, pulsetime=10):
               </ul>
             <li> Others
               <ul>
-                <li> Similar methods
+                <li> Similar methods, much can be done with heartbeats.
               </ul>
           </ul>
         </section>
 
         <section>
           <h3>
-            Making it easy to extend
+            Simple examples of extensions
           </h3>
+
+          <small>
+          <p>
+            Here are a few short clients that do meaningful stuff:
+          </p>
+
+          <ul>
+            <li>
+              <a href="https://github.com/ActivityWatch/aw-watcher-tmux/blob/master/aw-watcher-tmux">
+                A watcher that collects tmux data in &lt20 lines of bash
+              </a>
+            <li>
+              <a href="https://github.com/ActivityWatch/aw-detector/">
+                 A client library that does pattern matching on recent events
+              </a>
+              <ul>
+                <li>Could be used to generate real-time statuses such as:
+                    <br>
+                    <i>"Erik is currently working on ActivityWatch"</i>
+                    <br>
+                    <i>"Erik is currently playing Kerbal Space Program"</i>
+              </ul>
+            <li>
+              <a href="https://github.com/ActivityWatch/aw-fakedata">
+                A client script that generates fake data
+              </a> <minor>useful in testing</minor>
+          </ul>
+          </small>
         </section>
 
+        <section>
+          <h3>That's all!</h3>
+
+          <small>
+            Want to get notified when we have a release ready for end-users?
+            <br>
+            Give us your email address here and we'll let you know: <a href="http://bit.ly/aw-interest">http://bit.ly/aw-interest</a>
+            <br>
+            <minor>We promise to treat your email with the respect it deserves</minor>
+          </small>
+        </section>
       </div>
 
     </div>
