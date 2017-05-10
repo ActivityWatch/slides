@@ -63,16 +63,31 @@
             <h3>
               What's wrong with all the others?
             </h3>
+
+            <p>
+              <small>
+                Every solution we've seen has at least 2 of these issues.
+              </small>
+            </p>
+
             <ul>
               <li> Not open source
 
               <li> Privacy/security issues <span style="color: grey; font-size: 0.75em">(they own your data)</span>
 
+              <li> No syncronization/backup of data
+                <div>
+                  <small>
+                    <minor>we've not solved this yet, but working on it</minor>
+                  </small>
+                </div>
+
               <li> Hard/impossible to extend
-              <ul>
-                <li> Not modular/built to be extended
-                <li> A lot of work to collect a little more data
-              </ul>
+                <div>
+                <small>
+                  <minor>Not built to be extended. Takes a lot of work to collect a little more data</minor>
+                </small>
+                </div>
 
               <li> Low quality of data
               <ul>
@@ -300,7 +315,7 @@ def merge(e1, e2, pulsetime=10):
           <ul>
             <li>
               <a href="https://github.com/ActivityWatch/aw-watcher-tmux/blob/master/aw-watcher-tmux">
-                A watcher that collects tmux data in &lt20 lines of bash
+                A watcher that collects tmux data in &lt20 lines (LLOC) of bash
               </a>
             <li>
               <a href="https://github.com/ActivityWatch/aw-detector/">
