@@ -1,14 +1,20 @@
 <html>
 	<head>
+    <title>ActivityWatch slides</title>
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/white.css">
     <link rel="stylesheet" href="css/custom.css">
+
+    <!-- Highlight.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.8.0/styles/atom-one-dark.min.css">
 	</head>
 	<body>
 		<div class="reveal">
 			<div class="slides">
 				<section>
-          <h1>
+          <h1 style="line-height: 2em">
+            <img src="logo.png" style="box-shadow: none; border: none; float: left; height: 1.5em;">
             ActivityWatch
           </h1>
           <p>
@@ -16,20 +22,229 @@
             <br>Simple, extensible, no third parties.
           </p>
         </section>
-				<section>
-          Slide 2
-        </section>
-        <section data-markdown>
-          <script type="text/template">
-            ## Page title
 
-            A paragraph with some text and a [link](http://hakim.se).
-          </script>
+				<section class="left-align">
+          <h3>
+            Yet another time tracker? Why?
+          </h3>
+
+          <ul>
+            <li> Existing time trackers were bad
+            <ul>
+              <li> In many ways, more on that later.
+              <li> Frustrating if you think tracking is important.
+            </ul>
+            <li> Easy to build something basic
+            <ul>
+              <li> A challenge to build something better than what exists
+            </ul>
+            <li> Great exercise in software engineering
+            <li> Fun
+          </ul>
         </section>
+
+        <section>
+          <section>
+            <h3>
+              What's wrong with all the others?
+            </h3>
+            <ul>
+              <li> Not open source
+
+              <li> Privacy/security issues <span style="color: grey; font-size: 0.75em">(they own your data)</span>
+
+              <li> Hard/impossible to extend
+              <ul>
+                <li> Not modular/built to be extended
+                <li> A lot of work to collect a little more data
+              </ul>
+
+              <li> Low quality of data
+              <ul>
+                <li> Limited collection/detail <minor>we want to collect everything*</minor>
+                <li> Bad resolution <minor>to save storage space</minor>
+              </ul>
+            </ul>
+
+            <p>
+              <div class="footnote">
+                <small class="left-align">
+                    *Or rather, enable the collection of everything.
+                </small>
+              </div>
+            </p>
+          </section>
+
+          <section>
+            <p>
+              <a href="https://github.com/ActivityWatch/activitywatch/tree/cb16e91ea15a9c0b1d7358fbd6f57e141e25ce15#is-this-yet-another-time-tracker">
+                Feature comparison in the README
+              </a>
+            </p>
+          </section>
+
+        </section>
+
+        <section>
+          <h3>
+            Will they improve anytime soon?
+          </h3>
+
+          <div style="float: right; width: 35%">
+            <a href="">
+              <img src="./img/rescuetime-issue-xbox360.png"/>
+            </a>
+          </div>
+          <div style="width: 65%">
+            <ul>
+              <li> Not any money in it
+              <ul>
+                <li> ...with their businessplans
+              </ul>
+              <li> Technical debt
+                <ul>
+                  <li> Visualization is hard and messy
+                  <li> Non-modularity <minor>bad design</minor>
+                  <li> Locked into old design choices
+                </ul>
+              <li> Lack of vision<br><small><minor>Nothing has changed for many years</minor></small>
+              <li> So... no
+            </ul>
+          </div>
+        </section>
+
+        <section>
+          <section>
+            <h3>
+              Architecture
+            </h3>
+
+            <ul>
+              <li>Server
+              <ul>
+                <li>Manages all data and supports basic querying
+              </ul>
+              <li>Clients
+                <ul>
+                  <li>Watchers
+                  <ul>
+                    <li>Gather data and sends it to the server.
+                    <li>A type of client.
+                    <li>Examples: Active window, AFK, Web browser
+                  </ul>
+                  <li>Interfaces/visualization
+                  <li>Custom analysis
+                </ul>
+              <li>More?
+            </ul>
+          </section>
+
+          <section>
+            <h4>Dataformat</h4>
+
+            <ul>
+              <li>Buckets are containers of events
+              <li>Usually one bucket per watcher
+              <li>Events are simple JSON
+            </ul>
+          </section>
+
+          <section>
+            <h4>Anatomy of a window event</h4>
+            <pre><code class="json">{
+  "timestamp": "2017-05-10T10:26:52Z", # ISO8601 format.
+  "duration": 128.12,                  # In seconds.
+  "data": {                            # Any JSON object,
+      "app": "google-chrome",          # depends on eventtype.
+      "title": "ErikBjare on GitHub"
+  }
+}</code></pre>
+          </section>
+
+          <section>
+            <h5>Writing a watcher</h5>
+
+            <small>
+              <p>
+                We want to be able to write a simple watcher in as few lines of code as possible.
+                So <b>how do we make watchers easy to write?</b>
+              </p>
+            </small>
+
+            <p>
+              Heartbeats to the rescue!
+                <br><small><minor>idea taken from WakaTime</minor></small>
+            </p>
+
+            <small>
+              A heartbeat is a zero-duration event meant to update the latest event.
+              <br>
+                Or, if no recent event is available, become the latest event.
+            </small>
+          </section>
+
+          <section>
+            <h4>Merging events with the heartbeat method</h4>
+
+            <small>
+            If new event has identical data as previous event then:
+            </small>
+
+            <pre><code class="lang-python" data-trim>e1 = Event(timestamp="...10:26:52", duration=10, ...)
+e2 = Event(timestamp="...10:27:12", duration=0, ...)
+
+def merge(e1, e2, pulsetime=10):
+  if(e1.timestamp + e1.duration &gt;= e2.timestamp + pulsetime \
+     and e1.data == e2.data):
+    return [Event(timestamp=e1.timestamp,
+                  duration=e2.timestamp - e1.timestamp,
+                  data=e1.data)]
+  else:
+    return [e1, e2]</code></pre>
+
+          </section>
+        </section>
+
+        <section>
+          <h3>
+            How is it done?
+          </h3>
+
+          <ul>
+            <li> <b>AFK detection</b>
+              <ul>
+                <li>If no input for x min, user became inactive x min ago
+                <ul>
+                  <li> Not perfect, but works surprisingly well
+                </ul>
+                <li>RescueTime uses x=5min
+                <li>Data collected with smaller x can be converted to higher x
+                  <br><minor>Not the other way around</minor>
+              </ul>
+            <li> <b>Active window</b>
+              <ul>
+                <li>Poll the macOS/X11/Windows API every x seconds
+                <li>Send a heartbeat to the server with the data
+              </ul>
+            <li> Others
+              <ul>
+                <li> Similar methods
+              </ul>
+          </ul>
+        </section>
+
+        <section>
+          <h3>
+            Making it easy to extend
+          </h3>
+        </section>
+
 			</div>
 
 		</div>
 		<script src="js/reveal.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 		<script>
       Reveal.initialize({
         // Display controls in the bottom right corner
@@ -39,10 +254,10 @@
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: false,
+        slideNumber: true,
 
         // Push each slide change to the browser history
-        history: false,
+        history: true,
 
         // Enable keyboard shortcuts for navigation
         keyboard: true,
