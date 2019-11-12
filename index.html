@@ -20,20 +20,27 @@
             ActivityWatch
           </h2>
           <p>
-            Log what you do on your computer.
-            <br>Simple, extensible, no third parties.
+            Track how you spend your time on your devices.
+            <br>Cross-platform, extensible, privacy-focused.
           </p>
 
           <small>
             <p>
-            Get the source on <a href="https://github.com/ActivityWatch/activitywatch">GitHub</a>
+              Download it: <a href="https://activitywatch.net">activitywatch.net</a>
+              <br>
+              Get the source: <a href="https://github.com/ActivityWatch/activitywatch">github.com/ActivityWatch</a>
+            </p>
 
-            <br>
+            <p>
+              <small>
+                Slides available at <a href="https://activitywatch.net/slides/">activitywatch.net/slides</a>
+                <br>
+                <minor>source on <a href="https://github.com/ActivityWatch/slides">GitHub</a>, updated 2019-11-12</minor>
+              </small>
+            </p>
+            </p>
 
-            <small>
-                Slides available at <a href="https://activitywatch.net/slides/">activitywatch.net/slides/</a>
-                (source on <a href="https://github.com/ActivityWatch/slides">GitHub</a>)
-            </small>
+            <p>
             </p>
           </small>
 
@@ -153,32 +160,66 @@
 
         <section>
             <h3>
-              About the project
+              History of the project
             </h3>
 
             <!-- Maybe I should have an introduction about why I cared about this for so long? -->
 
             <small>
               <ul>
-                <li><b>30th of December 2014:</b>
+                <li><b>2014-12-30:</b>
                   <a href="https://github.com/ActivityWatch/activitywatch-old/commit/689440200bd51f7ee7c0e4e7ef63bc2b8fc53c3f">
                     First commit
                   </a>
-                  on a prototype
-                <li><b>April 2016:</b>
-                  Deprecated the prototype (now known as activitywatch-old) and made the
+                  on a prototype.
+                <li><b>2016-04:</b>
+                  Deprecated the prototype and
                   <a href="https://github.com/ActivityWatch/activitywatch/commit/a2f3d9dc35a2efb155c02821b7d59b84eec0d776">
-                    initial commit
+                   started working
                   </a>
-                  to the new repo.
-                <li><b>Summer 2016:</b> Spent a few weeks working half-time on it with my brother and a couple of friends.
-                <li><b>May 2017:</b> Mature API, works well, almost ready with a public release.
+                  on the new repo.
+                <li><b>2016 (summer):</b> Worked on it with my brother and a few friends in my apartment.
+                <li><b>2017-05:</b> Mature API, works well, almost ready with a public release.
+                <li><b>2017-11:</b> v0.7 released, it now works really well and reliably.
+                <li><b>2018:</b> Several beta releases for v0.8, improvements across the board.
+                <li><b>2018-09-25:</b> Johan starts working on aw-server-rust
+                <li><b>2018-09-25:</b> Johan starts working on aw-server-rust
+                <li><b>2019-03:</b> Android beta released (also compatible with Oculus Quest)
+                <li><b>2019-11-12:</b> v0.8 released, containing some of our most requested features.
+                <li><b>Future:</b> Syncing, switch to aw-server-rust, more visualizations and insight.
               </ul>
-
-              <p>
-                The vast majority of the work has been since last summer.
-              </p>
             </small>
+        </section>
+
+        <section>
+          <h5>Screenshot from 2017</h5>
+          <img src="./img/screenshot-webui-2017.png" style="width: 15em; border: 1px"/>
+        </section>
+
+        <section>
+          <h5>Screenshot from 2018</h5>
+          <img src="./img/screenshot-webui-2018.png" style="width: 15em; border: 1px;"/>
+        </section>
+
+        <section>
+          <h5>Screenshot from 2019</h5>
+          <img src="./img/screenshot-webui-2019.png" style="width: 20em; border: 1px;"/>
+        </section>
+
+        <section>
+          <h5>Some stats</h5>
+
+          <p>
+            <ul>
+              <li> &gt;25,000 downloads <minor>doubling <a href="https://docs.google.com/spreadsheets/d/13jUkA7p0nYUYALieQ3yuac3-NTEn7qqushcVCbHVczQ/edit#gid=0">~every year</a></minor>
+              <li> &gt;2.3k stars on GitHub
+              <li> &gt;186 votes on ProductHunt <minor style="font-size: 0.8em">#3 on 2019-07-07</minor>
+              <li> &gt;187 votes on AlternativeTo <minor style="font-size: 0.8em">#2 Time-tracking tool</minor>
+              <li> Rated 4.8/5 by 34 reviewers on <a href="https://alternativeto.net/software/activitywatch/reviews/">AlternativeTo</a>
+              <li> &gt;$635 donated ()
+              <li> (insert website traffic stats)
+            </ul>
+          </p>
         </section>
 
         <section>
@@ -187,19 +228,18 @@
           </h3>
 
           <ul>
-            <li> Written in Python 3.5+
-            <li> Focus on keeping things simple
-            <li> Vast majority of the code is easy to read
+            <li> Written in:
+              <ul>
+                <li>Python 3.6+ (with mypy)
+                <li>JavaScript/TypeScript
+                <li>Rust
+              </ul>
+            <li> Code is clean and easy to read
             <li> Split up into several repositories
-              <br><minor>served us good but has some downsides</minor>
-            <li> Core library has good test coverage (&gt;80%)
-              <br><minor>and is typechecked using mypy</minor>
+              <br><minor>for better and worse</minor>
+            <li> Core (Python) has good test coverage (~95%)
+              <br><minor>typechecked using mypy</minor>
           </ul>
-        </section>
-
-        <section>
-          <h5>Screenshot</h5>
-          <img src="./img/aw-webui-screenshot.png" style="width: 15em"/>
         </section>
 
         <section>
@@ -208,9 +248,9 @@
 
             <ul>
               <li>Server
-              <ul>
-                <li>Manages all data and supports basic querying
-              </ul>
+                <ul>
+                  <li>Manages all data and supports basic querying
+                </ul>
               <li>Clients
                 <ul>
                   <li>Watchers
@@ -218,14 +258,14 @@
                     <li>A type of client that gathers data and sends it to the server.
                     <li>Examples: Active window, AFK, Web browser
                   </ul>
-                <li>Web UI
-                  <ul>
-                    <li>Written with Vue.js, visualizations in D3.js, uses server API for everything
-                    <li>Built versions are hosted by the server
-                  </ul>
-                <li>Custom interfaces/visualization/analysis tools
-              </ul>
-              <li>Core library
+                  <li>Web UI
+                    <ul>
+                      <li>Written with Vue.js, visualizations in D3.js, uses server API for querying
+                      <li>Built versions are hosted by the server
+                    </ul>
+                  <li>Custom interfaces/visualization/analysis tools
+                </ul>
+              <li>Core library <minor>datastructures, transforms</minor>
               <li>Client library <minor>Makes it easy to write clients</minor>
             </ul>
           </section>
@@ -359,26 +399,32 @@ def merge(e1, e2, pulsetime=10):
         </section>
 
         <section>
-          <h3>That's all!</h3>
-
-          <small>
-            Want to get notified when we have a release ready for end-users?
-            <br>
-            Give us your email and we'll let you know: <a href="http://bit.ly/aw-interest">http://bit.ly/aw-interest</a>
-            <br>
-            <minor>We promise to treat your email with the respect it deserves</minor>
+          <h5>What do you want to hear more about?</h5>
+          <small style="text-align: left">
+            I can talk forever, here are your options:
+            <p>
+              <ul>
+                <li> Getting users / marketing
+                <li> Our CI setup
+                <li> Finding an important problem
+                <li> Building cross-platform apps
+                <li> Running an OSS project with just two people
+                <li> Building community (running issues and forum)
+                <li> Letting users help you with direction/what to build next
+                <li> Building reliable software
+                <li> Rust vs Python, TypeScript vs JavaScript
+              </ul>
+            </p>
           </small>
 
+
+        </section>
+
+        <section>
+          <h3>That's all!</h3>
+
           <p>
-            <small>
-              <small>
-                Are you a developer that can handle bleeding edge stuff?
-                <br>Try out the
-                <a href="https://github.com/ActivityWatch/activitywatch/blob/master/README.md#installation--usage">
-                  installation guide in the README!
-                </a>
-              </small>
-            </small>
+            Download it at <a href="https://activitywatch.net/">activitywatch.net</a>
           </p>
         </section>
       </div>
@@ -480,6 +526,13 @@ def merge(e1, e2, pulsetime=10):
         parallaxBackgroundHorizontal: null,
         parallaxBackgroundVertical: null
 
+      });
+
+      Reveal.configure({
+        keyboard: {
+          13: 'next', // go to the next slide when the ENTER key is pressed
+          32: 'next' // don't do anything when SPACE is pressed (i.e. disable a reveal.js default binding)
+        }
       });
     </script>
   </body>
